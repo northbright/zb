@@ -3,13 +3,11 @@ package main
 import (
 	"encoding/csv"
 	"fmt"
-	"strconv"
-	"strings"
-	//"io/ioutil"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 
-	//	"github.com/northbright/jsondb"
 	"github.com/garyburd/redigo/redis"
 	"github.com/northbright/pathhelper"
 )
@@ -21,9 +19,7 @@ var (
 	}
 	redisAddr     = ":6379"
 	redisPassword = ""
-	//classDB       *jsondb.DB
-	//zbDB          *jsondb.DB
-	gradeScores = map[string]int{
+	gradeScores   = map[string]int{
 		"幼小":  1,
 		"幼中":  2,
 		"幼大":  3,
@@ -125,7 +121,6 @@ func initPeriods(records [][]string) (err error) {
 	}
 	defer c.Close()
 
-	//if c, err = redis.Dial("tcp
 	// record format:
 	// 0: Campus, 1: grade, 2: week day, 3: period.
 	for _, r := range records {
@@ -180,9 +175,6 @@ end:
 
 func main() {
 	var err error
-	//if classDB, err = jsondb.Open(redisAddr, redisPassword, "class"); err != nil {
-	//goto end
-	//}
 
 	records := [][]string{}
 	if records, err = loadRecordsFromCSV(); err != nil {
