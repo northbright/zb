@@ -1,14 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"path"
 
 	"github.com/gin-gonic/gin"
+	"github.com/northbright/pathhelper"
 )
 
 var (
 	redisAddr     = ":6379"
 	redisPassword = ""
+	serverRoot    = ""
+	templatesPath = ""
+	staticPath    = ""
 )
 
 func main() {
@@ -26,11 +32,15 @@ func main() {
 		goto end
 	}
 
+	serverRoot, _ = pathhelper.GetCurrentExecDir()
+	templatesPath = path.Join(serverRoot, "templates")
+	staticPath = path.Join(serverRoot, "static")
+
 	// Serve Static files.
-	r.Static("/static/", "./static")
+	r.Static("/static/", staticPath)
 
 	// Load Templates.
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob(fmt.Sprintf("%v/*", templatesPath))
 
 	// Pages
 	r.GET("/", getZB)
