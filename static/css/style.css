@@ -1,0 +1,13 @@
+body {
+	background: #fff;
+    background:url(images/body.png) fixed;
+}
+
+.container
+{
+        margin-left: auto;
+        margin-right: auto;
+        width: 960px;
+        text-align: center;
+        color: #ffffff;
+}

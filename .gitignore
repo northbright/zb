@@ -6,3 +6,14 @@
 !*.go
 !*.json
 !*.sh
+!*.tmpl
+!*.js
+!*.css
+!*.jpg
+!*.png
+!*.gif
+!templates
+!static
+!static/css
+!static/css/images
+!static/js

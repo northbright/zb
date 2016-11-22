@@ -26,6 +26,17 @@ func main() {
 		goto end
 	}
 
+	// Serve Static files.
+	r.Static("/static/", "./static")
+
+	// Load Templates.
+	r.LoadHTMLGlob("templates/*")
+
+	// Pages
+	r.GET("/", getZB)
+	r.POST("/", postZB)
+
+	// APIs
 	r.GET("/campuses/", getCampuses)
 	r.GET("/grades/:campus/", getGrades)
 	r.GET("/periods/:campus/:grade/", getPeriods)
