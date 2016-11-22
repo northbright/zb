@@ -1,13 +1,39 @@
 body {
-	background: #fff;
+    background: #fff;
     background:url(images/body.png) fixed;
+}
+
+h1 {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 3.75em;
 }
 
 .container
 {
         margin-left: auto;
         margin-right: auto;
-        width: 960px;
+        width: 95%;
         text-align: center;
         color: #ffffff;
+	font-weight: 600;
+	font-size: 3.75em;
+}
+
+input {
+    height: 70px;
+    width: 55%;
+    margin-bottom: 40px;
+    font-size: 85%;
+}
+
+.submitbutton {
+    height: 120px;
+    width: 30%;
+    margin-top: 30px;
+    font-size: 85%;
+    background: #fffbbb;
 }
