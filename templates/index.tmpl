@@ -3,95 +3,73 @@
 <head>
   <title>{{ .title }}</title>
   <meta charset="UTF-8" />
-  <link rel='stylesheet' id='style-css'  href='static/css/style.css' media='all' />
+  <link rel='stylesheet' id='style-css'  href='static/css/jquery.mobile-1.4.5.min.css' media='all' />
+
   <script type="text/javascript" src="static/js/jquery-1.12.1.min.js"></script>
+  <script type="text/javascript" src="static/js/jquery.mobile-1.4.5.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function () {
-        $('#form').show();
-        $('#period_page').hide();        
-        var period_type = 0;
-        var cur_period = "";
-
-        $('#btn').click(function () {
-		alert("Done");
-        });
-
-        $('#original_period').click(function () {
-                $('#form').hide();
-                $('#period_page').show();
-		$('#title').text("选择：当前时段");
-		period_type = 0;
-        });
-
-        $('#wanted_period_1').click(function () {
-                $('#form').hide();
-                $('#period_page').show();
-                $('#title').text("选择：期望时段1");
-                period_type = 1;
-        });
-
-        $('#wanted_period_2').click(function () {
-                $('#form').hide();
-                $('#period_page').show();
-                $('#title').text("选择：期望时段2");
-                period_type = 2;
-        });
-
-	$('#btn_period').click(function () {
-            $('#form').show();
-            $('#period_page').hide();
-	    $('#title').text("转班申请");
-	    switch (period_type) {
-	    case 0:
-	        $('#original_period').val("当前时段：" + cur_period);
-		break;
-            case 1:
-                $('#wanted_period_1').val("期望时段1：" + cur_period);
-                break;
-            case 2:
-                $('#wanted_period_2').val("期望时段2：" + cur_period);	    
-                break;
-            }
-        });
     });
   </script>
 </head>
 <body>
-  <h1 id="title">转班申请</h1>
-  <div id="form" class="container">
-    <div>
-      <form method="POST" action="/zb">
-        <div>
-		<input id="name" name="name" type="text" value="学生姓名" onfocus="if (value =='学生姓名'){value =''}" onblur="if (value ==''){value='学生姓名'}" >
-	</div>
-	<div>
-          <input id="tel" name="tel" type="text" value="联系手机" onfocus="if (value =='联系手机'){value =''}" onblur="if (value ==''){value='联系手机'}">
-	</div>
-	<div>
-          <input id="original_period" name="original_period" type="text" readonly="true" value="当前时段">
-        </div>
-        <div>
-          <input id="wanted_period_1" name="wanted_period_1" type="text" readonly="true" value="期望时段1">                 </div>
-	<div>
-          <input id="wanted_period_2" name="wanted_period_2" type="text" readonly="true" value="期望时段2">
-        </div>
-	<div>
-          <input name="token" type="hidden" value="{{ .token  }}" >
-        </div>
-        <div>
-          <input id="btn" type="submit" value="提交" class="submitbutton" />
-        </div>
-      </form>
-    </div>
+
+<div data-role="page" id="page1">
+  <div data-role="header">
+    <h1>学生信息</h1>
   </div>
- 
-  <div id="period_page" class="container">
-    <div id="campus" >校区</div>
-    <div id="grade" >年级</div>
-    <div id="period" >上课时间</div>
-    <div id="btn_period">确定</div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
   </div>
-   
+
+  <div data-role="footer">
+  <a href="#page2">下一步</a>
+  </div>
+</div>   
+
+<div data-role="page" id="page2">
+  <div data-role="header">
+    <h1>当前时段</h1>
+  </div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
+  </div>
+
+  <div data-role="footer">
+  <a href="#page1">上一步</a><a href="#page3">下一步</a>
+  </div>
+</div> 
+
+<div data-role="page" id="page3">
+  <div data-role="header">
+    <h1>期望时段（首选）</h1>
+  </div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
+  </div>
+
+  <div data-role="footer">
+  <a href="#page2">上一步</a><a href="#page4">下一步</a>
+  </div>
+</div> 
+
+<div data-role="page" id="page4">
+  <div data-role="header">
+    <h1>期望时段（备选）</h1>
+  </div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
+  </div>
+
+  <div data-role="footer">
+  <a href="#page3">上一步</a>
+  </div>
+</div>
+
 </body>
 </html>
 
