@@ -16,4 +16,6 @@
 !static
 !static/css
 !static/css/images
+!static/css/images/icons-png
+!static/css/images/icons-svg
 !static/js
