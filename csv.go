@@ -146,7 +146,7 @@ func initPeriods(records [][]string) (err error) {
 			goto end
 		}
 
-		// Set key: grade, memebers: available campus.
+		// Set key: grade, memebers: available campuses.
 		if _, err = c.Do("SADD", grade, campus); err != nil {
 			goto end
 		}
