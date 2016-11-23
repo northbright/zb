@@ -3,6 +3,7 @@
 <head>
   <title>{{ .title }}</title>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel='stylesheet' id='style-css'  href='static/css/jquery.mobile-1.4.5.min.css' media='all' />
 
   <script type="text/javascript" src="static/js/jquery-1.12.1.min.js"></script>
@@ -20,11 +21,19 @@
   </div>
 
   <div data-role="content">
-    <p>Welcome!</p>
+    <form method="post" action="demoform.asp">
+      <div data-role="fieldcontain">
+        <label for="name">学生姓名：</label>
+        <input type="text" name="name" id="name" placeholder="请输入学生姓名...">
+
+        <label for="name">联系手机：</label>
+        <input type="text" name="name" id="name" placeholder="请确保联系手机号码正确...">
+      </div>
+    </form> 
+    <a href="#page2" data-role="button" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
   </div>
 
   <div data-role="footer">
-  <a href="#page2">下一步</a>
   </div>
 </div>   
 
@@ -37,8 +46,10 @@
     <p>Welcome!</p>
   </div>
 
+  <a href="#page1" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+  <a href="#page3" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+
   <div data-role="footer">
-  <a href="#page1">上一步</a><a href="#page3">下一步</a>
   </div>
 </div> 
 
@@ -51,8 +62,10 @@
     <p>Welcome!</p>
   </div>
 
+  <a href="#page2" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+  <a href="#page4" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+
   <div data-role="footer">
-  <a href="#page2">上一步</a><a href="#page4">下一步</a>
   </div>
 </div> 
 
@@ -65,8 +78,10 @@
     <p>Welcome!</p>
   </div>
 
+  <a href="#page3" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+  <button>提交</button>
+
   <div data-role="footer">
-  <a href="#page3">上一步</a>
   </div>
 </div>
 
