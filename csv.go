@@ -146,6 +146,11 @@ func initPeriods(records [][]string) (err error) {
 			goto end
 		}
 
+		// Set key: grade, memebers: available campus.
+		if _, err = c.Do("SADD", grade, campus); err != nil {
+			goto end
+		}
+
 		campus_grade := fmt.Sprintf("%v/%v", campus, grade)
 		weekDay_period := fmt.Sprintf("%v/%v", weekDay, period)
 
