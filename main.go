@@ -47,8 +47,8 @@ func main() {
 	r.POST("/", postZB)
 
 	// APIs
-	r.GET("/campuses/", getCampuses)
-	r.GET("/grades/:campus/", getGrades)
+	r.GET("/grades/", getGrades)
+	r.GET("/campus/:grade", getCampuses)
 	r.GET("/periods/:campus/:grade/", getPeriods)
 
 	r.Run(":8000")

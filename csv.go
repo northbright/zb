@@ -124,6 +124,7 @@ func initPeriods(records [][]string) (err error) {
 	for _, r := range records {
 		score := 0
 		weekDayScore := 0
+		k := ""
 		ok := false
 
 		if len(records) < 4 {
@@ -131,23 +132,20 @@ func initPeriods(records [][]string) (err error) {
 			goto end
 		}
 		campus, grade, weekDay, period := r[0], r[1], r[2], r[3]
-		// Set key: "campus", members: campuses.
-		if _, err = c.Do("SADD", "campus", campus); err != nil {
-			goto end
-		}
 
 		// Get grade score
 		if score, ok = gradeScores[grade]; !ok {
 			score = 0
 		}
 
-		// Init grades sorted set per campus. Set key: campus, members: grades.
-		if _, err = c.Do("ZADD", campus, score, grade); err != nil {
+		// Set key: "grade", members: all grades.
+		if _, err = c.Do("ZADD", "grades", score, grade); err != nil {
 			goto end
 		}
 
-		// Set key: grade, memebers: available campuses.
-		if _, err = c.Do("SADD", grade, campus); err != nil {
+		// Set key: grade:"campuses", memebers: available campuses.
+		k = fmt.Sprintf("%v:campuses", grade)
+		if _, err = c.Do("SADD", k, campus); err != nil {
 			goto end
 		}
 
