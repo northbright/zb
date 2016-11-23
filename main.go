@@ -51,7 +51,7 @@ func main() {
 	r.GET("/campus/:grade", getCampuses)
 	r.GET("/periods/:campus/:grade/", getPeriods)
 
-	r.Run(":8000")
+	r.Run(":80")
 end:
 	if err != nil {
 		log.Printf("main() error: %v\n", err)
