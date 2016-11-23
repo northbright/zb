@@ -87,9 +87,9 @@ func getGrades(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"success":  true,
-		"err_msg":  "",
-		"campuses": grades,
+		"success": true,
+		"err_msg": "",
+		"grades":  grades,
 	})
 
 	return

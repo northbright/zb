@@ -8,10 +8,7 @@
 
   <script type="text/javascript" src="static/js/jquery-1.12.1.min.js"></script>
   <script type="text/javascript" src="static/js/jquery.mobile-1.4.5.min.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function () {
-    });
-  </script>
+  <script type="text/javascript" src="static/js/zb.js"></script>
 </head>
 <body>
 
@@ -21,13 +18,17 @@
   </div>
 
   <div data-role="content">
-    <form method="post" action="demoform.asp">
+    <form method="post" action="">
       <div data-role="fieldcontain">
         <label for="name">学生姓名：</label>
         <input type="text" name="name" id="name" placeholder="请输入学生姓名...">
 
         <label for="name">联系手机：</label>
         <input type="text" name="name" id="name" placeholder="请确保联系手机号码正确...">
+
+        <label for="grade" class="select">年级：</label>
+          <select name="grade" id="grade">
+          </select>
       </div>
     </form> 
     <a href="#page2" data-role="button" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
@@ -43,7 +44,9 @@
   </div>
 
   <div data-role="content">
-    <p>Welcome!</p>
+    <label for="campus" class="select">校区：</label>
+    <select name="campus" id="campus">
+    </select>
   </div>
 
   <a href="#page1" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
