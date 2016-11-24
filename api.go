@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
@@ -164,9 +165,12 @@ func postZB(c *gin.Context) {
 	var conn redis.Conn
 	var n, periodNum int64
 	var k0, k1, k2 = "", "", ""
+	var t time.Time
+	tm := ""
 	campuses := []string{}
 	err_msg := ""
 	k := ""
+	field := ""
 	valid := false
 	record := ""
 	name := c.DefaultPostForm("name", "")
@@ -269,18 +273,31 @@ func postZB(c *gin.Context) {
 		}
 	}
 
-	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus1, wantedPeriod1, wantedCampus2, wantedPeriod2)
+	k = "records"
+	field = fmt.Sprintf("%v:%v:%v", name, tel, grade)
+	t = time.Now()
+	tm = fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
+	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus1, wantedPeriod1, wantedCampus2, wantedPeriod2, tm)
 	log.Printf("record: %v\n", record)
 
-	c.JSON(200, gin.H{
-		"success": true,
-		"err_msg": err_msg,
-	})
+	if _, err = conn.Do("HSET", k, field, record); err != nil {
+		err_msg = "数据写入错误."
+		goto end
 
-	return
+	}
+
 end:
-	c.JSON(200, gin.H{
-		"success": false,
-		"err_msg": err_msg,
-	})
+	if err_msg != "" {
+		c.JSON(200, gin.H{
+			"success": false,
+			"err_msg": err_msg,
+		})
+	} else {
+		c.JSON(200, gin.H{
+			"success": true,
+			"err_msg": err_msg,
+		})
+
+	}
+
 }
