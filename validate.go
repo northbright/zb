@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/garyburd/redigo/redis"
 )
@@ -11,6 +12,11 @@ func validateName(name string) bool {
 	if len(name) < 6 || len(name) > 60 {
 		return false
 	}
+
+	if strings.Contains(name, ",") {
+		return false
+	}
+
 	return true
 }
 
