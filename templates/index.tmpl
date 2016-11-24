@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel='stylesheet' id='style-css'  href='static/css/jquery.mobile-1.4.5.min.css' media='all' />
-
+  <link rel='stylesheet' id='style-css'  href='static/css/zb.css' media='all' />
   <script type="text/javascript" src="static/js/jquery-1.12.1.min.js"></script>
   <script type="text/javascript" src="static/js/jquery.mobile-1.4.5.min.js"></script>
   <script type="text/javascript" src="static/js/zb.js"></script>
@@ -14,24 +14,20 @@
 
 <div data-role="page" id="page1">
   <div data-role="header">
-    <h1>第1步：输入学生信息</h1>
+    <h1>1.学生信息</h1>
   </div>
 
   <div data-role="content">
-    <form method="post" action="">
-      <div data-role="fieldcontain">
         <label for="name">学生姓名：</label>
         <input type="text" name="name" id="name" placeholder="请输入学生姓名...">
 
         <label for="name">联系手机：</label>
-        <input type="text" name="name" id="name" placeholder="请确保联系手机号码正确...">
+        <input type="text" name="tel" id="tel" placeholder="请确保联系手机号码正确...">
 
         <label for="grade" class="select">年级：</label>
           <select name="grade" id="grade">
           </select>
-      </div>
-    </form> 
-    <a href="#page2" data-role="button" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+    <a href="#page2" id="page1-next" data-role="button" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
   </div>
 
   <div data-role="footer">
@@ -40,17 +36,21 @@
 
 <div data-role="page" id="page2">
   <div data-role="header">
-    <h1> 第2步：选择当前时段</h1>
+    <h1> 2.当前时段</h1>
   </div>
 
   <div data-role="content">
-    <label for="campus" class="select">校区：</label>
-    <select name="campus" id="campus">
+    <label for="currentCampus" class="select">校区：</label>
+    <select name="currentCampus" id="currentCampus">
     </select>
-  </div>
 
-  <a href="#page1" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
-  <a href="#page3" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+    <label for="currentPeriod" class="select">时段：</label>
+    <select name="currentPeriod" id="currentPeriod">
+    </select>
+
+    <a href="#page1" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+    <a href="#page3" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+  </div>
 
   <div data-role="footer">
   </div>
@@ -58,15 +58,21 @@
 
 <div data-role="page" id="page3">
   <div data-role="header">
-    <h1>第3步：选择期望时段（首选）</h1>
+    <h1>3.期望时段(首选)</h1>
   </div>
 
   <div data-role="content">
-    <p>Welcome!</p>
-  </div>
+    <label for="wantedCampus1" class="select">校区：</label>
+    <select name="wantedCampus1" id="wantedCampus1">
+    </select>
 
-  <a href="#page2" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
-  <a href="#page4" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+    <label for="wantedPeriod1" class="select">时段：</label>
+    <select name="wantedPeriod1" id="wantedPeriod1">
+    </select>
+
+    <a href="#page2" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+    <a href="#page4" class="ui-btn ui-icon-carat-r ui-btn-icon-left">下一步</a>
+  </div>
 
   <div data-role="footer">
   </div>
@@ -74,15 +80,21 @@
 
 <div data-role="page" id="page4">
   <div data-role="header">
-    <h1>第4步：选择期望时段（备选）</h1>
+    <h1>4.期望时段(备选)</h1>
   </div>
 
   <div data-role="content">
-    <p>Welcome!</p>
-  </div>
+    <label for="wantedCampus2" class="select">校区：</label>
+    <select name="wantedCampus2" id="wantedCampus2">
+    </select>
 
-  <a href="#page3" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
-  <button>提交</button>
+    <label for="wantedPeriod2" class="select">时段：</label>
+    <select name="wantedPeriod2" id="wantedPeriod2">
+    </select>
+
+    <a href="#page3" class="ui-btn ui-icon-carat-l ui-btn-icon-left">上一步</a>
+    <button id="submitBtn">提交</button>
+  </div>
 
   <div data-role="footer">
   </div>

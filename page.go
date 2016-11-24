@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"fmt"
 	//"log"
 	"net/http"
 
@@ -8,12 +9,6 @@ import (
 )
 
 func getZB(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"title": "转班申请",
-	})
-}
-
-func postZB(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"title": "转班申请",
 	})

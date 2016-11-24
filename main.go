@@ -44,11 +44,11 @@ func main() {
 
 	// Pages
 	r.GET("/", getZB)
-	r.POST("/", postZB)
+	r.POST("/zb", postZB)
 
 	// APIs
 	r.GET("/grades/", getGrades)
-	r.GET("/campus/:grade", getCampuses)
+	r.GET("/campuses/:grade", getCampuses)
 	r.GET("/periods/:campus/:grade/", getPeriods)
 
 	r.Run(":80")

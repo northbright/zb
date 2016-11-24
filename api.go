@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/gin-gonic/gin"
@@ -145,9 +146,54 @@ func getPeriods(c *gin.Context) {
 	}
 
 	c.JSON(200, gin.H{
-		"success":  true,
-		"err_msg":  "",
-		"campuses": periods,
+		"success": true,
+		"err_msg": "",
+		"periods": periods,
+	})
+
+	return
+end:
+	c.JSON(200, gin.H{
+		"success": false,
+		"err_msg": err_msg,
+	})
+}
+
+func postZB(c *gin.Context) {
+	err_msg := ""
+	//k := ""
+	record := ""
+	name := c.DefaultPostForm("name", "")
+	tel := c.DefaultPostForm("tel", "")
+	grade := c.DefaultPostForm("grade", "")
+	currentCampus := c.DefaultPostForm("currentCampus", "")
+	currentPeriod := c.DefaultPostForm("currentPeriod", "")
+	wantedCampus1 := c.DefaultPostForm("wantedCampus1", "")
+	wantedPeriod1 := c.DefaultPostForm("wantedPeriod1", "")
+	wantedCampus2 := c.DefaultPostForm("wantedCampus2", "")
+	wantedPeriod2 := c.DefaultPostForm("wantedPeriod2", "")
+
+	log.Printf("name: %v\n", name)
+	log.Printf("tel: %v\n", tel)
+	log.Printf("grade: %v\n", grade)
+	log.Printf("currentCampus: %v\n", currentCampus)
+	log.Printf("currentPeriod: %v\n", currentPeriod)
+	log.Printf("wantedCampus1: %v\n", wantedCampus1)
+	log.Printf("wantedPeriod1: %v\n", wantedPeriod1)
+	log.Printf("wantedCampus2: %v\n", wantedCampus2)
+	log.Printf("wantedPeriod2: %v\n", wantedPeriod2)
+
+	if name == "" || tel == "" || grade == "" || currentCampus == "" || currentPeriod == "" || wantedCampus1 == "" || wantedPeriod1 == "" {
+		err_msg = "信息不完整，请返回重新填写."
+		goto end
+	}
+
+	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus1, wantedPeriod1, wantedCampus2, wantedPeriod2)
+	log.Printf("record: %v\n", record)
+
+	c.JSON(200, gin.H{
+		"success": true,
+		"err_msg": err_msg,
 	})
 
 	return
