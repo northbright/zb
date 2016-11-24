@@ -169,7 +169,6 @@ $(document).on("pageinit","#page1",function(){
             success: function (data) {
                 if (data.success) {
                     alert("提交成功。请等待学校电话通知处理结果.");
-                    $.mobile.navigate("http://chnmz.com");
                 } else {
                     alert("提交失败：" + data.err_msg);
                 }
