@@ -280,10 +280,13 @@ func postZB(c *gin.Context) {
 	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus1, wantedPeriod1, wantedCampus2, wantedPeriod2, tm)
 	log.Printf("record: %v\n", record)
 
-	if _, err = conn.Do("HSET", k, field, record); err != nil {
+	conn.Send("MULTI")
+	conn.Send("HSET", k, field, record)
+	conn.Send("ZADD", "idx:time", t.Unix(), field)
+
+	if _, err = conn.Do("EXEC"); err != nil {
 		err_msg = "数据写入错误."
 		goto end
-
 	}
 
 end:
@@ -297,7 +300,5 @@ end:
 			"success": true,
 			"err_msg": err_msg,
 		})
-
 	}
-
 }

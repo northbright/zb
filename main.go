@@ -19,6 +19,8 @@ var (
 
 func main() {
 	var err error
+	var authorized *gin.RouterGroup
+
 	r := gin.Default()
 
 	records := [][]string{}
@@ -44,12 +46,16 @@ func main() {
 
 	// Pages
 	r.GET("/", getZB)
-	r.POST("/zb", postZB)
+	authorized = r.Group("/", gin.BasicAuth(gin.Accounts{
+		"name": "password",
+	}))
+	authorized.GET("/admin", admin)
 
 	// APIs
 	r.GET("/grades/", getGrades)
 	r.GET("/campuses/:grade", getCampuses)
 	r.GET("/periods/:campus/:grade/", getPeriods)
+	r.POST("/zb", postZB)
 
 	r.Run(":80")
 end:
