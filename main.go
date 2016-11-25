@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"path"
 
@@ -15,11 +17,19 @@ var (
 	serverRoot    = ""
 	templatesPath = ""
 	staticPath    = ""
+	configFile    = ""
 )
+
+type Config struct {
+	AdminAccount  string
+	AdminPassword string
+}
 
 func main() {
 	var err error
 	var authorized *gin.RouterGroup
+	buf := []byte{}
+	config := Config{}
 
 	r := gin.Default()
 
@@ -31,12 +41,24 @@ func main() {
 	log.Printf("len of records: %v\n", len(records))
 
 	if err = initPeriods(records); err != nil {
-		goto end
 	}
 
 	serverRoot, _ = pathhelper.GetCurrentExecDir()
 	templatesPath = path.Join(serverRoot, "templates")
 	staticPath = path.Join(serverRoot, "static")
+
+	configFile = path.Join(serverRoot, "config.json")
+
+	// Load Conifg
+	if buf, err = ioutil.ReadFile(configFile); err != nil {
+		log.Printf("Load config file error: %v\n", err)
+		goto end
+	}
+
+	if err = json.Unmarshal(buf, &config); err != nil {
+		log.Printf("Parse config err: %v\n", err)
+		goto end
+	}
 
 	// Serve Static files.
 	r.Static("/static/", staticPath)
@@ -47,7 +69,7 @@ func main() {
 	// Pages
 	r.GET("/", getZB)
 	authorized = r.Group("/", gin.BasicAuth(gin.Accounts{
-		"name": "password",
+		config.AdminAccount: config.AdminPassword,
 	}))
 	authorized.GET("/admin", admin)
 
