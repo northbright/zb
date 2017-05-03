@@ -4,10 +4,8 @@ var tel = "";
 var grade = "";
 var currentCampus = "";
 var currentPeriod = "";
-var wantedCampus1 = "";
-var wantedPeriod1 = "";
-var wantedCampus2 = "";
-var wantedPeriod2 = ""; 
+var wantedCampus = "";
+var wantedPeriod = "";
 
 function getGrades(gradeSelectObj) {
   gradeSelectObj.html('');
@@ -85,7 +83,14 @@ $(document).ready(function () {
 
 $(document).on("pageinit","#page1",function(){
     $('#grade').html('');
-    $('#page1-next').addClass("ui-state-disabled");
+   
+    name = $('#name').val();
+    tel =  $('#tel').val();
+    if ((name != "") && (tel != "")) {
+        $('#page1-next').removeClass("ui-state-disabled");
+    } else {
+        $('#page1-next').addClass("ui-state-disabled");
+    }
 
     // Page 1 events.
     $('#name').on("input", function () {
@@ -112,8 +117,7 @@ $(document).on("pageinit","#page1",function(){
         grade = $(this).find('option:selected').val();
         
         getCampuses(grade, $('#currentCampus'));
-        getCampuses(grade, $('#wantedCampus1'));
-        getCampuses(grade, $('#wantedCampus2'));
+        getCampuses(grade, $('#wantedCampus'));
     });
 
     // Page 2 events.
@@ -127,23 +131,13 @@ $(document).on("pageinit","#page1",function(){
     });
 
     // Page 3 events.
-    $('#wantedCampus1').change(function () {
-        wantedCampus1 = $(this).find('option:selected').val();
-        getPeriods(wantedCampus1, grade, $('#wantedPeriod1'));
+    $('#wantedCampus').change(function () {
+        wantedCampus = $(this).find('option:selected').val();
+        getPeriods(wantedCampus, grade, $('#wantedPeriod'));
     });
 
-    $('#wantedPeriod1').change(function () {
-        wantedPeriod1 = $(this).find('option:selected').val();
-    });
-
-    // Page 4 events.
-    $('#wantedCampus2').change(function () {
-        wantedCampus2 = $(this).find('option:selected').val();
-        getPeriods(wantedCampus2, grade, $('#wantedPeriod2'));
-    });
-
-    $('#wantedPeriod2').change(function () {
-        wantedPeriod2 = $(this).find('option:selected').val();
+    $('#wantedPeriod').change(function () {
+        wantedPeriod = $(this).find('option:selected').val();
     });
 
     $('#submitBtn').click(function () {
@@ -152,12 +146,10 @@ $(document).on("pageinit","#page1",function(){
         console.log("grade: " + grade);
         console.log("current campus: " + currentCampus);
         console.log("current period: " + currentPeriod);
-        console.log("wanted campus1: " + wantedCampus1);
-        console.log("wanted period1: " + wantedPeriod1);
-        console.log("wanted campus2: " + wantedCampus2);
-        console.log("wanted period2: " + wantedPeriod2);
+        console.log("wanted campus: " + wantedCampus);
+        console.log("wanted period: " + wantedPeriod);
 
-        postData = {name: name, tel: tel, grade: grade, currentCampus: currentCampus, currentPeriod: currentPeriod, wantedCampus1: wantedCampus1, wantedPeriod1: wantedPeriod1, wantedCampus2: wantedCampus2, wantedPeriod2: wantedPeriod2};
+        postData = {name: name, tel: tel, grade: grade, currentCampus: currentCampus, currentPeriod: currentPeriod, wantedCampus: wantedCampus, wantedPeriod: wantedPeriod};
         
         $.ajax({
             type: "POST",
@@ -168,7 +160,12 @@ $(document).on("pageinit","#page1",function(){
             },
             success: function (data) {
                 if (data.success) {
-                    alert("提交成功。请等待学校电话通知处理结果.");
+		    var msg = "提交成功。请等待学校电话通知处理结果.\n\n";
+		    msg += name + ", " + tel + ", " + grade + "\n";
+		    msg += "当前: " + currentCampus + ", " + currentPeriod + "\n";
+		    msg += "期望: " + wantedCampus + ", " + wantedPeriod + "\n";
+                    alert(msg);
+		    //$.mobile.navigate("/success");
                 } else {
                     alert("提交失败：" + data.err_msg);
                 }
@@ -205,19 +202,8 @@ $(document).on("pageinit","#page3",function(){
         $.mobile.navigate("/#page1");
         return
     }
-    getCampuses(grade, $('#wantedCampus1'));
+    getCampuses(grade, $('#wantedCampus'));
 });
 
 $(document).on("pagebeforeshow","#page3",function(){
 });
-
-$(document).on("pageinit","#page4",function(){
-    if (!initialized) {
-        $.mobile.navigate("/#page1");
-        return
-    }
-    getCampuses(grade, $('#wantedCampus2'));
-});
-
-$(document).on("pagebeforeshow","#page4",function(){
-});  

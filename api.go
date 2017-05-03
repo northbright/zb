@@ -164,7 +164,7 @@ func postZB(c *gin.Context) {
 	var err error
 	var conn redis.Conn
 	var n, periodNum int64
-	var k0, k1, k2 = "", "", ""
+	var k0, k1 = "", ""
 	var t time.Time
 	tm := ""
 	campuses := []string{}
@@ -178,22 +178,18 @@ func postZB(c *gin.Context) {
 	grade := c.DefaultPostForm("grade", "")
 	currentCampus := c.DefaultPostForm("currentCampus", "")
 	currentPeriod := c.DefaultPostForm("currentPeriod", "")
-	wantedCampus1 := c.DefaultPostForm("wantedCampus1", "")
-	wantedPeriod1 := c.DefaultPostForm("wantedPeriod1", "")
-	wantedCampus2 := c.DefaultPostForm("wantedCampus2", "")
-	wantedPeriod2 := c.DefaultPostForm("wantedPeriod2", "")
+	wantedCampus := c.DefaultPostForm("wantedCampus", "")
+	wantedPeriod := c.DefaultPostForm("wantedPeriod", "")
 
 	log.Printf("name: %v\n", name)
 	log.Printf("tel: %v\n", tel)
 	log.Printf("grade: %v\n", grade)
 	log.Printf("currentCampus: %v\n", currentCampus)
 	log.Printf("currentPeriod: %v\n", currentPeriod)
-	log.Printf("wantedCampus1: %v\n", wantedCampus1)
-	log.Printf("wantedPeriod1: %v\n", wantedPeriod1)
-	log.Printf("wantedCampus2: %v\n", wantedCampus2)
-	log.Printf("wantedPeriod2: %v\n", wantedPeriod2)
+	log.Printf("wantedCampus: %v\n", wantedCampus)
+	log.Printf("wantedPeriod: %v\n", wantedPeriod)
 
-	if name == "" || tel == "" || grade == "" || currentCampus == "" || currentPeriod == "" || wantedCampus1 == "" || wantedPeriod1 == "" {
+	if name == "" || tel == "" || grade == "" || currentCampus == "" || currentPeriod == "" || wantedCampus == "" || wantedPeriod == "" {
 		err_msg = "信息不完整，请返回重新填写."
 		goto end
 	}
@@ -219,13 +215,8 @@ func postZB(c *gin.Context) {
 		goto end
 	}
 
-	if valid = validatePeriod(conn, grade, wantedCampus1, wantedPeriod1); !valid {
-		err_msg = "期望时段（首选）有误：校区，年级与时段不匹配."
-		goto end
-	}
-
-	if valid = validatePeriod(conn, grade, wantedCampus2, wantedPeriod2); !valid {
-		err_msg = "期望时段（备选）有误：校区，年级与时段不匹配."
+	if valid = validatePeriod(conn, grade, wantedCampus, wantedPeriod); !valid {
+		err_msg = "期望时段有误：校区，年级与时段不匹配."
 		goto end
 	}
 
@@ -246,38 +237,24 @@ func postZB(c *gin.Context) {
 	}
 
 	k0 = fmt.Sprintf("%v/%v", currentCampus, currentPeriod)
-	k1 = fmt.Sprintf("%v/%v", wantedCampus1, wantedPeriod1)
-	k2 = fmt.Sprintf("%v/%v", wantedCampus2, wantedPeriod2)
+	k1 = fmt.Sprintf("%v/%v", wantedCampus, wantedPeriod)
 
 	if periodNum <= 1 {
 		err_msg = "无可选时间段，不能转班."
 		goto end
-	} else if periodNum == 2 {
+	} else {
 		if k0 == k1 {
-			err_msg = "当前时段与期望时段（首选）一致，请重新选择."
-			goto end
-		}
-
-	} else if periodNum >= 3 {
-		if k0 == k1 {
-			err_msg = "当前时段与期望时段（首选）一致，请重新选择."
-			goto end
-		}
-		if k0 == k2 {
-			err_msg = "当前时段与期望时段（备选）一致，请重新选择."
-			goto end
-		}
-		if k1 == k2 {
-			err_msg = "期望时段（首选）与（备选）一致，请重新选择."
+			err_msg = "当前时段与期望时段一致，请重新选择."
 			goto end
 		}
 	}
 
 	k = "records"
-	field = fmt.Sprintf("%v:%v:%v", name, tel, grade)
-	t = time.Now()
+	// Field: name:tel
+	field = fmt.Sprintf("%v:%v", name, tel)
+	t = time.Now().Local()
 	tm = fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
-	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus1, wantedPeriod1, wantedCampus2, wantedPeriod2, tm)
+	record = fmt.Sprintf("%v,%v,%v,%v,%v,%v,%v,%v", name, tel, grade, currentCampus, currentPeriod, wantedCampus, wantedPeriod, tm)
 	log.Printf("record: %v\n", record)
 
 	conn.Send("MULTI")

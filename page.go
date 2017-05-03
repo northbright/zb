@@ -52,3 +52,10 @@ end:
 		"Records": records,
 	})
 }
+
+func success(c *gin.Context) {
+	c.HTML(http.StatusOK, "success.tmpl", gin.H{
+		"title": "提交成功",
+		"msg":   "提交成功。请等待学校电话通知处理结果。",
+	})
+}

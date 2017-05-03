@@ -74,9 +74,9 @@ func main() {
 	authorized.GET("/admin", admin)
 
 	// APIs
-	r.GET("/grades/", getGrades)
+	r.GET("/grades", getGrades)
 	r.GET("/campuses/:grade", getCampuses)
-	r.GET("/periods/:campus/:grade/", getPeriods)
+	r.GET("/periods/:campus/:grade", getPeriods)
 	r.POST("/zb", postZB)
 
 	r.Run(":80")
