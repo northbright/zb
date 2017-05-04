@@ -49,6 +49,7 @@ end:
 	c.HTML(http.StatusOK, "admin.tmpl", gin.H{
 		"title":   "转班申请",
 		"msg":     msg,
+		"count":   len(records),
 		"Records": records,
 	})
 }
