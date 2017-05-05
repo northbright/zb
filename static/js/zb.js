@@ -7,7 +7,7 @@ var currentPeriod = "";
 var wantedCampus = "";
 var wantedPeriod = "";
 
-function getGrades(gradeSelectObj) {
+function getGrades(gradeSelectObj, gradeValue) {
   gradeSelectObj.html('');
 
   $.ajax({
@@ -25,13 +25,14 @@ function getGrades(gradeSelectObj) {
                     gradeSelectObj.append('<option value="' + value + '">' + value + '</option>');
                 });    
                 gradeSelectObj.val(data.grades[0]).change();
-                
+                gradeValue = data.grades[0];
+		//alert("gradeValue = " + gradeValue); 
             }
         }
   });
 }
 
-function getCampuses(grade, campusSelectObj) {
+function getCampuses(grade, campusSelectObj, campusValue) {
   campusSelectObj.html('');
 
   $.ajax({
@@ -49,12 +50,14 @@ function getCampuses(grade, campusSelectObj) {
                     campusSelectObj.append('<option value="' + value + '">' + value + '</option>');
                 });
                 campusSelectObj.val(data.campuses[0]).change();
+                campusValue = data.campuses[0];
+		//alert("campusValue = " + campusValue);
             }
         }
   });
 }
 
-function getPeriods(campus, grade, periodSelectObj) {
+function getPeriods(campus, grade, periodSelectObj, periodValue) {
   periodSelectObj.html('');
 
   $.ajax({
@@ -62,7 +65,7 @@ function getPeriods(campus, grade, periodSelectObj) {
         type: 'GET',
         dataType: 'json',
         error : function () {
-            alert("获取时段信息失败");
+            alert("获取时段信息失败." + "校区:" + campus + ",年级:" + grade);
         },
         success: function (data) {
             if (!data.success) {
@@ -72,25 +75,15 @@ function getPeriods(campus, grade, periodSelectObj) {
                     periodSelectObj.append('<option value="' + value + '">' + value + '</option>');
                 });
                 periodSelectObj.val(data.periods[0]).change();
+		periodValue = data.periods[0];
+		//alert("periodValue = " + periodValue);
             }
         }
   });
 }
 
 $(document).ready(function () {
-  //alert("ready");
-});
-
-$(document).on("pageinit","#page1",function(){
-    $('#grade').html('');
-   
-    name = $('#name').val();
-    tel =  $('#tel').val();
-    if ((name != "") && (tel != "")) {
-        $('#page1-next').removeClass("ui-state-disabled");
-    } else {
-        $('#page1-next').addClass("ui-state-disabled");
-    }
+    //alert("document ready.");
 
     // Page 1 events.
     $('#name').on("input", function () {
@@ -115,15 +108,15 @@ $(document).on("pageinit","#page1",function(){
 
     $('#grade').change(function () {
         grade = $(this).find('option:selected').val();
-        
-        getCampuses(grade, $('#currentCampus'));
-        getCampuses(grade, $('#wantedCampus'));
+
+        getCampuses(grade, $('#currentCampus'), currentCampus);
+        getCampuses(grade, $('#wantedCampus'), wantedCampus);
     });
 
     // Page 2 events.
     $('#currentCampus').change(function () {
         currentCampus = $(this).find('option:selected').val();
-        getPeriods(currentCampus, grade, $('#currentPeriod'));
+        getPeriods(currentCampus, grade, $('#currentPeriod'), currentPeriod);
     });
 
     $('#currentPeriod').change(function () {
@@ -133,7 +126,7 @@ $(document).on("pageinit","#page1",function(){
     // Page 3 events.
     $('#wantedCampus').change(function () {
         wantedCampus = $(this).find('option:selected').val();
-        getPeriods(wantedCampus, grade, $('#wantedPeriod'));
+        getPeriods(wantedCampus, grade, $('#wantedPeriod')), wantedPeriod;
     });
 
     $('#wantedPeriod').change(function () {
@@ -150,7 +143,7 @@ $(document).on("pageinit","#page1",function(){
         console.log("wanted period: " + wantedPeriod);
 
         postData = {name: name, tel: tel, grade: grade, currentCampus: currentCampus, currentPeriod: currentPeriod, wantedCampus: wantedCampus, wantedPeriod: wantedPeriod};
-        
+
         $.ajax({
             type: "POST",
             url: "/zb",
@@ -160,49 +153,49 @@ $(document).on("pageinit","#page1",function(){
             },
             success: function (data) {
                 if (data.success) {
-		    var msg = "提交成功。请等待学校电话通知处理结果.\n\n";
-		    msg += name + ", " + tel + ", " + grade + "\n";
-		    msg += "当前: " + currentCampus + ", " + currentPeriod + "\n";
-		    msg += "期望: " + wantedCampus + ", " + wantedPeriod + "\n";
+                    var msg = "提交成功。请等待学校电话通知处理结果.\n\n";
+                    msg += name + ", " + tel + ", " + grade + "\n";
+                    msg += "当前: " + currentCampus + ", " + currentPeriod + "\n";
+                    msg += "期望: " + wantedCampus + ", " + wantedPeriod + "\n";
                     alert(msg);
-		    $.mobile.navigate("/#page4");
+                    $.mobile.navigate("/#page4");
                 } else {
                     alert("提交失败：" + data.err_msg);
                 }
             },
             dataType: "json"
         });
-        
+
     });
 
-    // Get grades.
-    getGrades($('#grade'));
+    getGrades($('#grade'), grade);
 
-    // Set initialized tag.
     initialized = true;
+
+});
+
+$(document).on("pageinit","#page1",function(){
 });
 
 $(document).on("pagebeforeshow","#page1",function(){
-    $('#grade').val(grade);
+    //$('#grade').val(grade);
+    //alert("page1 before show.");
+    name = $('#name').val();
+    tel =  $('#tel').val();
+    if ((name != "") && (tel != "")) {
+        $('#page1-next').removeClass("ui-state-disabled");
+    } else {
+        $('#page1-next').addClass("ui-state-disabled");
+    }
 });
 
 $(document).on("pageinit","#page2",function(){
-    if (!initialized) {
-        $.mobile.navigate("/#page1");
-        return
-    }
-    getCampuses(grade, $('#currentCampus'));
 });
 
 $(document).on("pagebeforeshow","#page2",function(){
 });
 
 $(document).on("pageinit","#page3",function(){
-    if (!initialized) {
-        $.mobile.navigate("/#page1");
-        return
-    }
-    getCampuses(grade, $('#wantedCampus'));
 });
 
 $(document).on("pagebeforeshow","#page3",function(){
