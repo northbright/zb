@@ -165,7 +165,7 @@ $(document).on("pageinit","#page1",function(){
 		    msg += "当前: " + currentCampus + ", " + currentPeriod + "\n";
 		    msg += "期望: " + wantedCampus + ", " + wantedPeriod + "\n";
                     alert(msg);
-		    //$.mobile.navigate("/success");
+		    $.mobile.navigate("/#page4");
                 } else {
                     alert("提交失败：" + data.err_msg);
                 }
